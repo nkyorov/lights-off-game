@@ -1,0 +1,213 @@
+<!--
+University of Leeds
+author: Nikolay Kyorov
+username:sc16nsk
+ -->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script>
+
+function toggle(i,j) {
+      b=document.getElementById("but_" + i + j)
+      t = b.innerHTML
+      if (t=="X") {b.innerHTML = "O";
+                   b.setAttribute( "style", "color:red; background-color:yellow" )
+                  }
+      if (t=="O") {b.innerHTML = "X";
+                   b.setAttribute( "style", "color:white; background-color:black" )
+                  }
+
+}
+
+function press(i,j){
+  //i = row,
+  //j=column
+  // (i,j+1)-right;
+  // (i,j-1)-left;
+  // (i+1,j)-down;
+  // (i-1,j)-up;
+
+  //Keep in mind that we start at 0 for both i and j!
+  toggle(i,j);
+  switch(i){
+    //First line
+    case 0:
+      switch(j){
+        //Fifth column
+        case 4:
+          toggle(i,j-1);
+          toggle(i+1,j);
+          break;
+        //First column
+        case 0:
+          toggle(i+1,j);
+          toggle(i,j+1);
+          break;
+        case 1:
+        case 2:
+        case 3:
+          toggle(i,j-1);
+          toggle(i,j+1);
+          toggle(i+1,j);
+          break;
+        }
+        break;
+    //Second line
+    case 1:
+      switch(j){
+          //Fifth column
+          case 4:
+            toggle(i,j-1);
+            toggle(i+1,j);
+            toggle(i-1,j);
+            break;
+          //First column
+          case 0:
+            toggle(i+1,j);
+            toggle(i,j+1);
+            toggle(i-1,j);
+            break;
+          case 1:
+          case 2:
+          case 3:
+            toggle(i,j-1);
+            toggle(i,j+1);
+            toggle(i+1,j);
+            toggle(i-1,j);
+            break;
+          }
+          break;
+    //Third line
+    case 2:
+      switch(j){
+          //Fifth column
+          case 4:
+            toggle(i,j-1);
+            toggle(i+1,j);
+            toggle(i-1,j);
+            break;
+          //First column
+          case 0:
+            toggle(i+1,j);
+            toggle(i,j+1);
+            toggle(i-1,j);
+            break;
+          case 1:
+          case 2:
+          case 3:
+            toggle(i-1,j);
+            toggle(i,j-1);
+            toggle(i,j+1);
+            toggle(i+1,j);
+            break;
+          }
+          break;
+    //Forth line
+    case 3:
+      switch(j){
+          case 4:
+            toggle(i,j-1);
+            toggle(i+1,j);
+            toggle(i-1,j);
+            break;
+          case 0:
+            toggle(i+1,j);
+            toggle(i,j+1);
+            toggle(i-1,j);
+            break;
+          case 1:
+          case 2:
+          case 3:
+            toggle(i,j-1);
+            toggle(i,j+1);
+            toggle(i+1,j);
+            toggle(i-1,j);
+            break;
+          }
+          break;
+    //Fifth line
+    case 4:
+      switch(j){
+          case 4:
+            toggle(i,j-1);
+            toggle(i-1,j);
+            break;
+          case 0:
+            toggle(i-1,j);
+            toggle(i,j+1);
+            break;
+          case 1:
+          case 2:
+          case 3:
+            toggle(i-1,j);
+            toggle(i,j-1);
+            toggle(i,j+1);
+            break;
+          }
+          break;
+  }
+  if(checkAllOff()){
+    var message = document.getElementById("message").innerHTML = "Congratulations! You have sold the puzzle";
+
+  }
+  else
+  {
+    var message = document.getElementById("message").innerHTML = "";
+  }
+}
+
+function checkAllOff(){
+  //holds the total numer fo lights turned on
+  var counter =0;
+  //Loop through the grid
+  for (i=0; i < 5; i++){
+    for(j=0; j<5; j++){
+      b=document.getElementById("but_" + i + j)
+      t = b.innerHTML
+      if (t=="X") {counter++;
+                  }
+    }
+  }
+  if(counter===25){
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+function generateGrid() {
+        var d = document.getElementById("button-grid");
+        var table = document.createElement("table");
+        d.appendChild(table);
+        for (var i = 0; i < 5; i++) {
+                var row = document.createElement("tr");
+                for (var j = 0; j < 5; j++) {
+                        var cell = document.createElement("td");
+                        cell.innerHTML = "<button type=button id=but_" + i + j +
+                                         " onclick=\"press(" +i + ',' +j + ")\"" +
+                                         " style=\"color:red; background-color:yellow\"" +
+                                         ">O</button>" ;
+                        row.appendChild(cell);
+                }
+                table.appendChild(row);
+        }
+         toggle(2,2) // Set middle button to off state (otherwise it seems to be impossible).
+}
+
+window.onload = function() {
+        generateGrid();
+};
+</script>
+<title>Lights Off Puzzle</title>
+</head>
+<body>
+<h2><center>***Lights off***</center></h1>
+<h4><center>Click on buttons until they turn black</center></h4>
+<center><div id="button-grid"></div></center>
+<center><div><h4 id="message"> </h4></div></center>
+</body>
+
+</html>
